@@ -75,30 +75,6 @@
 module red_pitaya_top
 (
    // PS connections
- `ifdef TOOL_AHEAD
-   inout  [54-1: 0] processing_system7_0_MIO,
-   input            processing_system7_0_PS_SRSTB_pin,
-   input            processing_system7_0_PS_CLK_pin,
-   input            processing_system7_0_PS_PORB_pin,
-   inout            processing_system7_0_DDR_Clk,
-   inout            processing_system7_0_DDR_Clk_n,
-   inout            processing_system7_0_DDR_CKE,
-   inout            processing_system7_0_DDR_CS_n,
-   inout            processing_system7_0_DDR_RAS_n,
-   inout            processing_system7_0_DDR_CAS_n,
-   output           processing_system7_0_DDR_WEB_pin,
-   inout  [ 3-1: 0] processing_system7_0_DDR_BankAddr,
-   inout  [15-1: 0] processing_system7_0_DDR_Addr,
-   inout            processing_system7_0_DDR_ODT,
-   inout            processing_system7_0_DDR_DRSTB,
-   inout  [32-1: 0] processing_system7_0_DDR_DQ,
-   inout  [ 4-1: 0] processing_system7_0_DDR_DM,
-   inout  [ 4-1: 0] processing_system7_0_DDR_DQS,
-   inout  [ 4-1: 0] processing_system7_0_DDR_DQS_n,
-   inout            processing_system7_0_DDR_VRN,
-   inout            processing_system7_0_DDR_VRP,
- `endif
- `ifdef TOOL_VIVADO
    inout  [54-1: 0] FIXED_IO_mio       ,
    inout            FIXED_IO_ps_clk    ,
    inout            FIXED_IO_ps_porb   ,
@@ -120,7 +96,7 @@ module red_pitaya_top
    inout            DDR_ras_n          ,
    inout            DDR_reset_n        ,
    inout            DDR_we_n           ,
- `endif
+
 
    // Red Pitaya periphery
   
@@ -161,9 +137,6 @@ module red_pitaya_top
    output [ 8-1: 0] led_o       
 
 );
-
-
-
 
 
 
@@ -214,30 +187,6 @@ wire             axi1_rstn_ps       ;
   
 red_pitaya_ps i_ps
 (
- `ifdef TOOL_AHEAD
-  .processing_system7_0_MIO          (  processing_system7_0_MIO            ),
-  .processing_system7_0_PS_SRSTB_pin (  processing_system7_0_PS_SRSTB_pin   ),
-  .processing_system7_0_PS_CLK_pin   (  processing_system7_0_PS_CLK_pin     ),
-  .processing_system7_0_PS_PORB_pin  (  processing_system7_0_PS_PORB_pin    ),
-  .processing_system7_0_DDR_Clk      (  processing_system7_0_DDR_Clk        ),
-  .processing_system7_0_DDR_Clk_n    (  processing_system7_0_DDR_Clk_n      ),
-  .processing_system7_0_DDR_CKE      (  processing_system7_0_DDR_CKE        ),
-  .processing_system7_0_DDR_CS_n     (  processing_system7_0_DDR_CS_n       ),
-  .processing_system7_0_DDR_RAS_n    (  processing_system7_0_DDR_RAS_n      ),
-  .processing_system7_0_DDR_CAS_n    (  processing_system7_0_DDR_CAS_n      ),
-  .processing_system7_0_DDR_WEB_pin  (  processing_system7_0_DDR_WEB_pin    ),
-  .processing_system7_0_DDR_BankAddr (  processing_system7_0_DDR_BankAddr   ),
-  .processing_system7_0_DDR_Addr     (  processing_system7_0_DDR_Addr       ),
-  .processing_system7_0_DDR_ODT      (  processing_system7_0_DDR_ODT        ),
-  .processing_system7_0_DDR_DRSTB    (  processing_system7_0_DDR_DRSTB      ),
-  .processing_system7_0_DDR_DQ       (  processing_system7_0_DDR_DQ         ),
-  .processing_system7_0_DDR_DM       (  processing_system7_0_DDR_DM         ),
-  .processing_system7_0_DDR_DQS      (  processing_system7_0_DDR_DQS        ),
-  .processing_system7_0_DDR_DQS_n    (  processing_system7_0_DDR_DQS_n      ),
-  .processing_system7_0_DDR_VRN      (  processing_system7_0_DDR_VRN        ),
-  .processing_system7_0_DDR_VRP      (  processing_system7_0_DDR_VRP        ),
- `endif
- `ifdef TOOL_VIVADO
   .FIXED_IO_mio       (  FIXED_IO_mio                ),
   .FIXED_IO_ps_clk    (  FIXED_IO_ps_clk             ),
   .FIXED_IO_ps_porb   (  FIXED_IO_ps_porb            ),
@@ -259,7 +208,6 @@ red_pitaya_ps i_ps
   .DDR_ras_n          (  DDR_ras_n                   ),
   .DDR_reset_n        (  DDR_reset_n                 ),
   .DDR_we_n           (  DDR_we_n                    ),
- `endif
 
   .fclk_clk_o      (  fclk               ),
   .fclk_rstn_o     (  frstn              ),
@@ -453,247 +401,12 @@ assign ps_sys_ack   = sys_cs[ 0] & sys_ack[  0] |
                       sys_cs[ 7] & sys_ack[  7] ; 
 
 
-assign sys_rdata[ 6*32+31: 6*32] = 32'h0;
+//assign sys_rdata[ 6*32+31: 6*32] = 32'h0;
 
-assign sys_err[6] = {1{1'b0}} ;
-assign sys_ack[6] = {1{1'b1}} ;
+//assign sys_err[6] = {1{1'b0}} ;
+//assign sys_ack[6] = {1{1'b1}} ;
 
 
-
-
-
-
-
-
-//---------------------------------------------------------------------------------
-//
-//  House Keeping
-
-wire  [  8-1: 0] exp_p_in     ;
-wire  [  8-1: 0] exp_p_out    ;
-wire  [  8-1: 0] exp_p_dir    ;
-wire  [  8-1: 0] exp_n_in     ;
-wire  [  8-1: 0] exp_n_out    ;
-wire  [  8-1: 0] exp_n_dir    ;
-
-red_pitaya_hk i_hk
-(
-  .clk_i           (  adc_clk                    ),  // clock
-  .rstn_i          (  adc_rstn                   ),  // reset - active low
-
-  // LED
-  .led_o           (  led_o                      ),  // LED output
-   // Expansion connector
-  .exp_p_dat_i     (  exp_p_in                   ),  // input data
-  .exp_p_dat_o     (  exp_p_out                  ),  // output data
-  .exp_p_dir_o     (  exp_p_dir                  ),  // 1-output enable
-  .exp_n_dat_i     (  exp_n_in                   ),
-  .exp_n_dat_o     (  exp_n_out                  ),
-  .exp_n_dir_o     (  exp_n_dir                  ),
-
-   // System bus
-  .sys_clk_i       (  sys_clk                    ),  // clock
-  .sys_rstn_i      (  sys_rstn                   ),  // reset - active low
-  .sys_addr_i      (  sys_addr                   ),  // address
-  .sys_wdata_i     (  sys_wdata                  ),  // write data
-  .sys_sel_i       (  sys_sel                    ),  // write byte select
-  .sys_wen_i       (  sys_wen[0]                 ),  // write enable
-  .sys_ren_i       (  sys_ren[0]                 ),  // read enable
-  .sys_rdata_o     (  sys_rdata[ 0*32+31: 0*32]  ),  // read data
-  .sys_err_o       (  sys_err[0]                 ),  // error indicator
-  .sys_ack_o       (  sys_ack[0]                 )   // acknowledge signal
-);
-
-
-
-genvar GV ;
-
-generate
-for( GV = 0 ; GV < 8 ; GV = GV + 1)
-begin : exp_iobuf
-  IOBUF i_iobufp (.O(exp_p_in[GV]), .IO(exp_p_io[GV]), .I(exp_p_out[GV]), .T(!exp_p_dir[GV]) );
-  IOBUF i_iobufn (.O(exp_n_in[GV]), .IO(exp_n_io[GV]), .I(exp_n_out[GV]), .T(!exp_n_dir[GV]) );
-end
-endgenerate
-
-
-
-
-
-//---------------------------------------------------------------------------------
-//
-//  Oscilloscope application
-
-wire trig_asg_out ;
-
-red_pitaya_scope i_scope
-(
-  // ADC
-  .adc_a_i         (  adc_a                      ),  // CH 1
-  .adc_b_i         (  adc_b                      ),  // CH 2
-  .adc_clk_i       (  adc_clk                    ),  // clock
-  .adc_rstn_i      (  adc_rstn                   ),  // reset - active low
-  .trig_ext_i      (  exp_p_in[0]                ),  // external trigger
-  .trig_asg_i      (  trig_asg_out               ),  // ASG trigger
-
-  // AXI0 master
-  .axi0_clk_o      (  axi0_clk                   ),  // global clock
-  .axi0_rstn_o     (  axi0_rstn                  ),  // global reset
-  .axi0_waddr_o    (  axi0_waddr                 ),  // system write address
-  .axi0_wdata_o    (  axi0_wdata                 ),  // system write data
-  .axi0_wsel_o     (  axi0_wsel                  ),  // system write byte select
-  .axi0_wvalid_o   (  axi0_wvalid                ),  // system write data valid
-  .axi0_wlen_o     (  axi0_wlen                  ),  // system write burst length
-  .axi0_wfixed_o   (  axi0_wfixed                ),  // system write burst type (fixed / incremental)
-  .axi0_werr_i     (  axi0_werr                  ),  // system write error
-  .axi0_wrdy_i     (  axi0_wrdy                  ),  // system write ready
-  .axi0_rstn_i     (  axi0_rstn_ps               ),  // reset from PS
-
-  // AXI1 master
-  .axi1_clk_o      (  axi1_clk                   ),  // global clock
-  .axi1_rstn_o     (  axi1_rstn                  ),  // global reset
-  .axi1_waddr_o    (  axi1_waddr                 ),  // system write address
-  .axi1_wdata_o    (  axi1_wdata                 ),  // system write data
-  .axi1_wsel_o     (  axi1_wsel                  ),  // system write byte select
-  .axi1_wvalid_o   (  axi1_wvalid                ),  // system write data valid
-  .axi1_wlen_o     (  axi1_wlen                  ),  // system write burst length
-  .axi1_wfixed_o   (  axi1_wfixed                ),  // system write burst type (fixed / incremental)
-  .axi1_werr_i     (  axi1_werr                  ),  // system write error
-  .axi1_wrdy_i     (  axi1_wrdy                  ),  // system write ready
-  .axi1_rstn_i     (  axi1_rstn_ps               ),  // reset from PS
-
-   // System bus
-  .sys_clk_i       (  sys_clk                    ),  // clock
-  .sys_rstn_i      (  sys_rstn                   ),  // reset - active low
-  .sys_addr_i      (  sys_addr                   ),  // address
-  .sys_wdata_i     (  sys_wdata                  ),  // write data
-  .sys_sel_i       (  sys_sel                    ),  // write byte select
-  .sys_wen_i       (  sys_wen[1]                 ),  // write enable
-  .sys_ren_i       (  sys_ren[1]                 ),  // read enable
-  .sys_rdata_o     (  sys_rdata[ 1*32+31: 1*32]  ),  // read data
-  .sys_err_o       (  sys_err[1]                 ),  // error indicator
-  .sys_ack_o       (  sys_ack[1]                 )   // acknowledge signal
-);
-
-
-
-
-
-
-
-
-//---------------------------------------------------------------------------------
-//
-//  DAC arbitrary signal generator
-
-wire  [ 14-1: 0] asg_a       ;
-wire  [ 14-1: 0] asg_b       ;
-
-red_pitaya_asg i_asg
-(
-   // DAC
-  .dac_a_o         (  asg_a                      ),  // CH 1
-  .dac_b_o         (  asg_b                      ),  // CH 2
-  .dac_clk_i       (  adc_clk                    ),  // clock
-  .dac_rstn_i      (  adc_rstn                   ),  // reset - active low
-  .trig_a_i        (  exp_p_in[0]                ),
-  .trig_b_i        (  exp_p_in[0]                ),
-  .trig_out_o      (  trig_asg_out               ),
-
-  // System bus
-  .sys_clk_i       (  sys_clk                    ),  // clock
-  .sys_rstn_i      (  sys_rstn                   ),  // reset - active low
-  .sys_addr_i      (  sys_addr                   ),  // address
-  .sys_wdata_i     (  sys_wdata                  ),  // write data
-  .sys_sel_i       (  sys_sel                    ),  // write byte select
-  .sys_wen_i       (  sys_wen[2]                 ),  // write enable
-  .sys_ren_i       (  sys_ren[2]                 ),  // read enable
-  .sys_rdata_o     (  sys_rdata[ 2*32+31: 2*32]  ),  // read data
-  .sys_err_o       (  sys_err[2]                 ),  // error indicator
-  .sys_ack_o       (  sys_ack[2]                 )   // acknowledge signal
-);
-
-
-
-
-
-
-
-
-//---------------------------------------------------------------------------------
-//
-//  MIMO PID controller
-
-wire  [ 14-1: 0] pid_a       ;
-wire  [ 14-1: 0] pid_b       ;
-
-red_pitaya_pid i_pid
-(
-   // signals
-  .clk_i           (  adc_clk                    ),  // clock
-  .rstn_i          (  adc_rstn                   ),  // reset - active low
-  .dat_a_i         (  adc_a                      ),  // in 1
-  .dat_b_i         (  adc_b                      ),  // in 2
-  .dat_a_o         (  pid_a                      ),  // out 1
-  .dat_b_o         (  pid_b                      ),  // out 2
-
-  // System bus
-  .sys_clk_i       (  sys_clk                    ),  // clock
-  .sys_rstn_i      (  sys_rstn                   ),  // reset - active low
-  .sys_addr_i      (  sys_addr                   ),  // address
-  .sys_wdata_i     (  sys_wdata                  ),  // write data
-  .sys_sel_i       (  sys_sel                    ),  // write byte select
-  .sys_wen_i       (  sys_wen[3]                 ),  // write enable
-  .sys_ren_i       (  sys_ren[3]                 ),  // read enable
-  .sys_rdata_o     (  sys_rdata[ 3*32+31: 3*32]  ),  // read data
-  .sys_err_o       (  sys_err[3]                 ),  // error indicator
-  .sys_ack_o       (  sys_ack[3]                 )   // acknowledge signal
-);
-
-
-
-
-//---------------------------------------------------------------------------------
-//
-//  Sumation of ASG and PID signal
-//  perform saturation before sending to DAC 
-
-wire  [ 15-1: 0] dac_a_sum       ;
-wire  [ 15-1: 0] dac_b_sum       ;
-
-assign dac_a_sum = $signed(asg_a) + $signed(pid_a);
-assign dac_b_sum = $signed(asg_b) + $signed(pid_b);
-
-always @(*) begin
-   if (dac_a_sum[15-1:15-2] == 2'b01) // pos. overflow
-      dac_a <= 14'h1FFF ;
-   else if (dac_a_sum[15-1:15-2] == 2'b10) // neg. overflow
-      dac_a <= 14'h2000 ;
-   else
-      dac_a <= dac_a_sum[14-1:0] ;
-
-
-   if (dac_b_sum[15-1:15-2] == 2'b01) // pos. overflow
-      dac_b <= 14'h1FFF ;
-   else if (dac_b_sum[15-1:15-2] == 2'b10) // neg. overflow
-      dac_b <= 14'h2000 ;
-   else
-      dac_b <= dac_b_sum[14-1:0] ;
-end
-
-
-
-
-
-
-
-
-
-
-//---------------------------------------------------------------------------------
-//
-//  Analog mixed signals
-//  XADC and slow PWM DAC control
 
 red_pitaya_ams i_ams
 (
@@ -721,12 +434,6 @@ red_pitaya_ams i_ams
   .sys_err_o       (  sys_err[4]                 ),  // error indicator
   .sys_ack_o       (  sys_ack[4]                 )   // acknowledge signal
 );
-
-
-
-
-
-
 
 
 //---------------------------------------------------------------------------------
@@ -776,8 +483,73 @@ red_pitaya_daisy i_daisy
 );
 
 
+//---------------------------------------------------------------------------------
+//
+//  Peak detector
 
 
+//reg  [  8-1: 0] led_reg ;
+//reg  [  14-1: 0] adc_max ;
+//initial begin
+//    adc_max <= 14'h0;
+//end
+//always @(posedge adc_clk)
+//begin
+//    if (adc_rstn == 1'b0)
+//    begin
+//       adc_max <= 14'h0;
+//    end
+//    else
+//    begin
+//        if (~adc_a[13])
+//        begin
+//            if (adc_a[12:0]>=adc_max)
+//            begin
+//                adc_max <= adc_a;    
+//            end
+//        end
+//        else
+//        begin
+//            if ((~adc_a[12:0])>=adc_max)
+//            begin
+//                adc_max <= (~adc_a);    
+//            end
+//        end
+//    end
+//end
+//assign led_o[6:0] = adc_max[12:6];
+//assign led_o[7] = adc_a[13];
+
+wire  [14-1:0]    pd_peak_ampl;
+wire  [32-1:0]    pd_peak_loc;
+wire              pd_done;
+
+assign led_o[6:0]       = pd_peak_ampl[12:6];
+assign led_o[7]         = adc_a[13];
+
+peak_detector pd
+(
+  // Peak detector
+  .adc_clk          ( adc_clk         ),
+  .adc_rstn         ( adc_rstn        ),
+  .adc_a_in         ( adc_a           ),
+  .adc_b_in         ( adc_b           ),
+  .pd_peak_ampl     ( pd_peak_ampl    ),
+  .pd_peak_loc      ( pd_peak_loc     ),
+  .pd_done          ( pd_done         ),
+  
+   // System bus
+  .sys_clk_i       (  sys_clk                    ),  // clock
+  .sys_rstn_i      (  sys_rstn                   ),  // reset - active low
+  .sys_addr_i      (  sys_addr                   ),  // address
+  .sys_wdata_i     (  sys_wdata                  ),  // write data
+  .sys_sel_i       (  sys_sel                    ),  // write byte select
+  .sys_wen_i       (  sys_wen[6]                 ),  // write enable
+  .sys_ren_i       (  sys_ren[6]                 ),  // read enable
+  .sys_rdata_o     (  sys_rdata[ 6*32+31: 6*32]  ),  // read data
+  .sys_err_o       (  sys_err[6]                 ),  // error indicator
+  .sys_ack_o       (  sys_ack[6]                 )   // acknowledge signal
+);
 
 
 
@@ -785,15 +557,29 @@ red_pitaya_daisy i_daisy
 
 //---------------------------------------------------------------------------------
 //
-//  Power consumtion test
+//  House Keeping
 
-red_pitaya_test i_test
+wire  [  8-1: 0] exp_p_in     ;
+wire  [  8-1: 0] exp_p_out    ;
+wire  [  8-1: 0] exp_p_dir    ;
+wire  [  8-1: 0] exp_n_in     ;
+wire  [  8-1: 0] exp_n_out    ;
+wire  [  8-1: 0] exp_n_dir    ;
+
+red_pitaya_hk i_hk
 (
-   // power test
   .clk_i           (  adc_clk                    ),  // clock
   .rstn_i          (  adc_rstn                   ),  // reset - active low
 
-  .rand_o          (                             ),
+  // LED
+  .led_o           (                       ),  // LED output
+   // Expansion connector
+  .exp_p_dat_i     (  exp_p_in                   ),  // input data
+  .exp_p_dat_o     (  exp_p_out                  ),  // output data
+  .exp_p_dir_o     (  exp_p_dir                  ),  // 1-output enable
+  .exp_n_dat_i     (  exp_n_in                   ),
+  .exp_n_dat_o     (  exp_n_out                  ),
+  .exp_n_dir_o     (  exp_n_dir                  ),
 
    // System bus
   .sys_clk_i       (  sys_clk                    ),  // clock
@@ -801,34 +587,24 @@ red_pitaya_test i_test
   .sys_addr_i      (  sys_addr                   ),  // address
   .sys_wdata_i     (  sys_wdata                  ),  // write data
   .sys_sel_i       (  sys_sel                    ),  // write byte select
-  .sys_wen_i       (  sys_wen[7]                 ),  // write enable
-  .sys_ren_i       (  sys_ren[7]                 ),  // read enable
-  .sys_rdata_o     (  sys_rdata[ 7*32+31: 7*32]  ),  // read data
-  .sys_err_o       (  sys_err[7]                 ),  // error indicator
-  .sys_ack_o       (  sys_ack[7]                 )   // acknowledge signal
+  .sys_wen_i       (  sys_wen[0]                 ),  // write enable
+  .sys_ren_i       (  sys_ren[0]                 ),  // read enable
+  .sys_rdata_o     (  sys_rdata[ 0*32+31: 0*32]  ),  // read data
+  .sys_err_o       (  sys_err[0]                 ),  // error indicator
+  .sys_ack_o       (  sys_ack[0]                 )   // acknowledge signal
 );
 
-//assign sys_rdata[ 7*32+31: 7*32] = 32'h0 ; 
-//assign sys_err[7] = 1'b0 ;
-//assign sys_ack[7] = 1'b1 ;
 
 
+genvar GV ;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+generate
+for( GV = 0 ; GV < 8 ; GV = GV + 1)
+begin : exp_iobuf
+  IOBUF i_iobufp (.O(exp_p_in[GV]), .IO(exp_p_io[GV]), .I(exp_p_out[GV]), .T(!exp_p_dir[GV]) );
+  IOBUF i_iobufn (.O(exp_n_in[GV]), .IO(exp_n_io[GV]), .I(exp_n_out[GV]), .T(!exp_n_dir[GV]) );
+end
+endgenerate
 
 
 endmodule
