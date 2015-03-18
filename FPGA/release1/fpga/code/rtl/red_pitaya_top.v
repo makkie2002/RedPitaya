@@ -402,10 +402,10 @@ assign ps_sys_ack   = sys_cs[ 0] & sys_ack[  0] |
                       sys_cs[ 7] & sys_ack[  7] ; 
 
 
-assign sys_rdata[ 6*32+31: 6*32] = 32'h0;
+// assign sys_rdata[ 6*32+31: 6*32] = 32'h0;
 
-assign sys_err[6] = {1{1'b0}} ;
-assign sys_ack[6] = {1{1'b1}} ;
+// assign sys_err[6] = {1{1'b0}} ;
+// assign sys_ack[6] = {1{1'b1}} ;
 
 
 
@@ -431,7 +431,7 @@ red_pitaya_hk i_hk
   .rstn_i          (  adc_rstn                   ),  // reset - active low
 
   // LED
-  .led_o           (  led_o                      ),  // LED output
+  .led_o           (                             ),  // LED output
    // Expansion connector
   .exp_p_dat_i     (  exp_p_in                   ),  // input data
   .exp_p_dat_o     (  exp_p_out                  ),  // output data
@@ -698,8 +698,40 @@ red_pitaya_daisy i_daisy
   .sys_ack_o       (  sys_ack[5]                 )   // acknowledge signal
 );
 
+//---------------------------------------------------------------------------------
+//
+//  Peak detector
 
 
+wire  [14-1:0]    pd_peak_ampl;
+wire  [32-1:0]    pd_peak_loc;
+wire              pd_done;
+
+assign led_o[7:0]       = pd_peak_ampl[12:5];
+
+peak_detector pd
+(
+  // Peak detector
+  .adc_clk          ( adc_clk         ),
+  .adc_rstn         ( adc_rstn        ),
+  .adc_a_in         ( adc_a           ),
+  .adc_b_in         ( adc_b           ),
+  .pd_peak_ampl     ( pd_peak_ampl    ),
+  .pd_peak_loc      ( pd_peak_loc     ),
+  .pd_done          ( pd_done         ),
+  
+   // System bus
+  .sys_clk_i       (  sys_clk                    ),  // clock
+  .sys_rstn_i      (  sys_rstn                   ),  // reset - active low
+  .sys_addr_i      (  sys_addr                   ),  // address
+  .sys_wdata_i     (  sys_wdata                  ),  // write data
+  .sys_sel_i       (  sys_sel                    ),  // write byte select
+  .sys_wen_i       (  sys_wen[6]                 ),  // write enable
+  .sys_ren_i       (  sys_ren[6]                 ),  // read enable
+  .sys_rdata_o     (  sys_rdata[ 6*32+31: 6*32]  ),  // read data
+  .sys_err_o       (  sys_err[6]                 ),  // error indicator
+  .sys_ack_o       (  sys_ack[6]                 )   // acknowledge signal
+);
 
 
 
