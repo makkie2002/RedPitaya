@@ -210,17 +210,17 @@ set_property PACKAGE_PIN M15 [get_ports {exp_n_io[7]}]
 
 
 ### SATA connector
-set_property PACKAGE_PIN T12 [get_ports {daisy_p_o[0]}]
-set_property PACKAGE_PIN U12 [get_ports {daisy_n_o[0]}]
+#set_property PACKAGE_PIN T12 [get_ports {daisy_p_o[0]}]
+#set_property PACKAGE_PIN U12 [get_ports {daisy_n_o[0]}]
 
-set_property PACKAGE_PIN U14 [get_ports {daisy_p_o[1]}]
-set_property PACKAGE_PIN U15 [get_ports {daisy_n_o[1]}]
+#set_property PACKAGE_PIN U14 [get_ports {daisy_p_o[1]}]
+#set_property PACKAGE_PIN U15 [get_ports {daisy_n_o[1]}]
 
-set_property PACKAGE_PIN P14 [get_ports {daisy_p_i[0]}]
-set_property PACKAGE_PIN R14 [get_ports {daisy_n_i[0]}]
+#set_property PACKAGE_PIN P14 [get_ports {daisy_p_i[0]}]
+#set_property PACKAGE_PIN R14 [get_ports {daisy_n_i[0]}]
 
-set_property PACKAGE_PIN N18 [get_ports {daisy_p_i[1]}]
-set_property PACKAGE_PIN P19 [get_ports {daisy_n_i[1]}]
+#set_property PACKAGE_PIN N18 [get_ports {daisy_p_i[1]}]
+#set_property PACKAGE_PIN P19 [get_ports {daisy_n_i[1]}]
 
 
 
@@ -258,7 +258,7 @@ create_clock -period 8.000 -name adc_clk [get_ports adc_clk_p_i]
 set_input_delay -clock adc_clk 3.400 [get_ports adc_dat_a_i[*]]
 set_input_delay -clock adc_clk 3.400 [get_ports adc_dat_b_i[*]]
 
-create_clock -period 4.000 -name rx_clk  [get_ports daisy_p_i[1]]
+#create_clock -period 4.000 -name rx_clk  [get_ports daisy_p_i[1]]
 
 
 
@@ -266,7 +266,7 @@ set_false_path -from [get_clocks adc_clk]     -to [get_clocks dac_clk_out]
 set_false_path -from [get_clocks clk_fpga_0]  -to [get_clocks ser_clk_out]
 set_false_path -from [get_clocks clk_fpga_0]  -to [get_clocks dac_2clk_out]
 set_false_path -from [get_clocks clk_fpga_0]  -to [get_clocks adc_clk]
-set_false_path -from [get_clocks clk_fpga_0]  -to [get_clocks par_clk]
+#set_false_path -from [get_clocks clk_fpga_0]  -to [get_clocks par_clk]
 set_false_path -from [get_clocks dac_clk_out] -to [get_clocks dac_2clk_out]
 set_false_path -from [get_clocks dac_clk_out] -to [get_clocks dac_2ph_out]
 

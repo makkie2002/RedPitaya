@@ -128,10 +128,10 @@ module red_pitaya_top
 
 
    // SATA connector
-   output [ 2-1: 0] daisy_p_o          ,  // line 1 is clock capable
-   output [ 2-1: 0] daisy_n_o          ,
-   input  [ 2-1: 0] daisy_p_i          ,  // line 1 is clock capable
-   input  [ 2-1: 0] daisy_n_i          ,
+//   output [ 2-1: 0] daisy_p_o          ,  // line 1 is clock capable
+//   output [ 2-1: 0] daisy_n_o          ,
+//   input  [ 2-1: 0] daisy_p_i          ,  // line 1 is clock capable
+//   input  [ 2-1: 0] daisy_n_i          ,
 
    // LED
    output [ 8-1: 0] led_o       
@@ -436,51 +436,51 @@ red_pitaya_ams i_ams
 );
 
 
-//---------------------------------------------------------------------------------
-//
-//  Daisy chain
-//  simple communication module
+////---------------------------------------------------------------------------------
+////
+////  Daisy chain
+////  simple communication module
 
-wire daisy_rx_rdy ;
-wire dly_clk = fclk[3]; // 200MHz clock from PS - used for IDELAY (optionaly)
+//wire daisy_rx_rdy ;
+//wire dly_clk = fclk[3]; // 200MHz clock from PS - used for IDELAY (optionaly)
 
-red_pitaya_daisy i_daisy
-(
-   // SATA connector
-  .daisy_p_o       (  daisy_p_o                  ),  // line 1 is clock capable
-  .daisy_n_o       (  daisy_n_o                  ),
-  .daisy_p_i       (  daisy_p_i                  ),  // line 1 is clock capable
-  .daisy_n_i       (  daisy_n_i                  ),
+//red_pitaya_daisy i_daisy
+//(
+//   // SATA connector
+//  .daisy_p_o       (  daisy_p_o                  ),  // line 1 is clock capable
+//  .daisy_n_o       (  daisy_n_o                  ),
+//  .daisy_p_i       (  daisy_p_i                  ),  // line 1 is clock capable
+//  .daisy_n_i       (  daisy_n_i                  ),
 
-   // Data
-  .ser_clk_i       (  ser_clk                    ),  // high speed serial
-  .dly_clk_i       (  dly_clk                    ),  // delay clock
-   // TX
-  .par_clk_i       (  adc_clk                    ),  // data paralel clock
-  .par_rstn_i      (  adc_rstn                   ),  // reset - active low
-  .par_rdy_o       (  daisy_rx_rdy               ),
-  .par_dv_i        (  daisy_rx_rdy               ),
-  .par_dat_i       (  16'h1234                   ),
-   // RX
-  .par_clk_o       (                             ),
-  .par_rstn_o      (                             ),
-  .par_dv_o        (                             ),
-  .par_dat_o       (                             ),
+//   // Data
+//  .ser_clk_i       (  ser_clk                    ),  // high speed serial
+//  .dly_clk_i       (  dly_clk                    ),  // delay clock
+//   // TX
+//  .par_clk_i       (  adc_clk                    ),  // data paralel clock
+//  .par_rstn_i      (  adc_rstn                   ),  // reset - active low
+//  .par_rdy_o       (  daisy_rx_rdy               ),
+//  .par_dv_i        (  daisy_rx_rdy               ),
+//  .par_dat_i       (  16'h1234                   ),
+//   // RX
+//  .par_clk_o       (                             ),
+//  .par_rstn_o      (                             ),
+//  .par_dv_o        (                             ),
+//  .par_dat_o       (                             ),
 
-  .debug_o         (/*led_o*/                    ),
+//  .debug_o         (/*led_o*/                    ),
 
-   // System bus
-  .sys_clk_i       (  sys_clk                    ),  // clock
-  .sys_rstn_i      (  sys_rstn                   ),  // reset - active low
-  .sys_addr_i      (  sys_addr                   ),  // address
-  .sys_wdata_i     (  sys_wdata                  ),  // write data
-  .sys_sel_i       (  sys_sel                    ),  // write byte select
-  .sys_wen_i       (  sys_wen[5]                 ),  // write enable
-  .sys_ren_i       (  sys_ren[5]                 ),  // read enable
-  .sys_rdata_o     (  sys_rdata[ 5*32+31: 5*32]  ),  // read data
-  .sys_err_o       (  sys_err[5]                 ),  // error indicator
-  .sys_ack_o       (  sys_ack[5]                 )   // acknowledge signal
-);
+//   // System bus
+//  .sys_clk_i       (  sys_clk                    ),  // clock
+//  .sys_rstn_i      (  sys_rstn                   ),  // reset - active low
+//  .sys_addr_i      (  sys_addr                   ),  // address
+//  .sys_wdata_i     (  sys_wdata                  ),  // write data
+//  .sys_sel_i       (  sys_sel                    ),  // write byte select
+//  .sys_wen_i       (  sys_wen[5]                 ),  // write enable
+//  .sys_ren_i       (  sys_ren[5]                 ),  // read enable
+//  .sys_rdata_o     (  sys_rdata[ 5*32+31: 5*32]  ),  // read data
+//  .sys_err_o       (  sys_err[5]                 ),  // error indicator
+//  .sys_ack_o       (  sys_ack[5]                 )   // acknowledge signal
+//);
 
 
 //---------------------------------------------------------------------------------
